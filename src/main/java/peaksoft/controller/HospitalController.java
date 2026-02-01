@@ -1,0 +1,45 @@
+package peaksoft.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import peaksoft.entity.Hospital;
+import peaksoft.service.HospitalService;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/hospitals")
+@RequiredArgsConstructor
+public class HospitalController {
+    private final HospitalService hospitalService;
+
+    @GetMapping
+    public String getAllHospitals(Model model) {
+        List<Hospital> allHospital = hospitalService.getAllHospital();
+        model.addAttribute("hospitals", allHospital);
+        return "mainPage";
+    }
+
+    @GetMapping("/newHospital")
+    public String createHospital(Model model) {
+        model.addAttribute("newHospital", new Hospital());
+        return "newHospital";
+    }
+
+    @PostMapping("/saveHospital")
+    public String saveHospital(@ModelAttribute("newHospital") Hospital hospital) {
+        // ⬆️ ИСПРАВЛЕНО: было "hospital", должно быть "newHospital"
+        hospitalService.saveHospital(hospital);
+        return "redirect:/hospitals";
+    }
+
+    @GetMapping("/{id}")
+    public String getByIdHospital(@PathVariable("id") Long id, Model model) {
+        // ⬆️ ИСПРАВЛЕНО: добавлено ("id")
+        Hospital hospital = hospitalService.getByIdHospital(id);
+        model.addAttribute("hospital", hospital);
+        return "hospitalById";
+    }
+}
