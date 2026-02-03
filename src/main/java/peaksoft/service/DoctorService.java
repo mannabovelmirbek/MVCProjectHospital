@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface DoctorService {
     void saveDoctor(Doctor doctor);
+    void assignDoctorToDepartments(Long doctorId, List<Long> departmentIds);
     List<Doctor> getAllDoctor();
     Doctor getByIdDoctor(Long id);
     void updateDoctor(Long id,Doctor newDoctor);

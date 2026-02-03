@@ -25,21 +25,21 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department getByIdDepartment(Long id) {
-        return null;
+        return departmentRepo.getByIdDepartment(id);
     }
 
     @Override
     public void updateDepartment(Long id, Department newDepartment) {
-
+        departmentRepo.updateDepartment(id, newDepartment);
     }
 
     @Override
     public void deleteDepartment(Long id) {
-
+        departmentRepo.deleteDepartment(id);
     }
 
     @Override
     public boolean existsByName(String name) {
-        return false;
+        return departmentRepo.existsByName(name);
     }
 }

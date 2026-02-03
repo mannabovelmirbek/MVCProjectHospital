@@ -8,6 +8,7 @@ import java.util.List;
 @Repository
 public interface DoctorRepo {
     void saveDoctor(Doctor doctor);
+    void assignDoctorToDepartments(Long doctorId, List<Long> departmentIds);
     List<Doctor> getAllDoctor();
     Doctor getByIdDoctor(Long id);
     void updateDoctor(Long id,Doctor newDoctor);
@@ -16,5 +17,4 @@ public interface DoctorRepo {
     long countDoctorsByHospitalId(Long hospitalId);
 
     boolean existsByEmail(String email);
-
 }

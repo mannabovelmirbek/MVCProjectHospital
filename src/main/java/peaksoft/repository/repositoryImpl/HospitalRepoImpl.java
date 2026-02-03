@@ -6,6 +6,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import peaksoft.entity.Hospital;
+import peaksoft.exceptions.NotFoundException;
+import peaksoft.exceptions.RequiredFieldException;
 import peaksoft.repository.HospitalRepo;
 
 import java.util.List;
@@ -19,6 +21,13 @@ public class HospitalRepoImpl implements HospitalRepo {
 
     @Override
     public void saveHospital(Hospital hospital) {
+        // Проверка на null полей (VII)
+        if (hospital.getName() == null || hospital.getName().isBlank()) {
+            throw new RequiredFieldException("Hospital name cannot be null or empty");
+        }
+        if (hospital.getAddress() == null || hospital.getAddress().isBlank()) {
+            throw new RequiredFieldException("Hospital address cannot be null or empty");
+        }
         entityManager.persist(hospital);
     }
 
@@ -31,17 +40,33 @@ public class HospitalRepoImpl implements HospitalRepo {
 
     @Override
     public Hospital getByIdHospital(Long id) {
-        // ✅ ИСПРАВЛЕНО: Добавлен LEFT JOIN FETCH для загрузки департаментов
-        return entityManager.createQuery(
+        Hospital hospital = entityManager.createQuery(
                         "select h from Hospital h left join fetch h.departmentList where h.id = :id",
                         Hospital.class)
                 .setParameter("id", id)
                 .getSingleResult();
+
+        if (hospital == null) {
+            throw new NotFoundException("Hospital with id " + id + " not found");
+        }
+        return hospital;
     }
 
     @Override
     public void updateHospital(Long id, Hospital newHospital) {
         Hospital hospital = entityManager.find(Hospital.class, id);
+        if (hospital == null) {
+            throw new NotFoundException("Hospital with id " + id + " not found");
+        }
+
+        // Проверка на null полей
+        if (newHospital.getName() == null || newHospital.getName().isBlank()) {
+            throw new RequiredFieldException("Hospital name cannot be null or empty");
+        }
+        if (newHospital.getAddress() == null || newHospital.getAddress().isBlank()) {
+            throw new RequiredFieldException("Hospital address cannot be null or empty");
+        }
+
         hospital.setName(newHospital.getName());
         hospital.setAddress(newHospital.getAddress());
     }
@@ -49,6 +74,9 @@ public class HospitalRepoImpl implements HospitalRepo {
     @Override
     public void deleteHospital(Long id) {
         Hospital hospital = entityManager.find(Hospital.class, id);
+        if (hospital == null) {
+            throw new NotFoundException("Hospital with id " + id + " not found");
+        }
         entityManager.remove(hospital);
     }
 }

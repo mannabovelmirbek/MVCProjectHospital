@@ -10,6 +10,12 @@
     <h2 th:text="${hospital.name}">Hospital Name</h2>
     <p><strong>Address:</strong> <span th:text="${hospital.address}">Hospital address</span></p>
 
+    <!-- Количество докторов и пациентов (I) -->
+    <div class="alert alert-info">
+        <p><strong>Doctors:</strong> <span th:text="${doctorsCount}">0</span></p>
+        <p><strong>Patients:</strong> <span th:text="${patientsCount}">0</span></p>
+    </div>
+
     <div class="mb-3">
         <a th:href="@{/hospitals}" class="btn btn-secondary">Back</a>
         <a th:href="@{'/hospitals/edit/' + ${hospital.id}}" class="btn btn-warning">Edit</a>
@@ -28,16 +34,22 @@
         <thead>
         <tr>
             <th>Name</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <!-- ✅ Исправлено: departmentList вместо departments -->
         <tr th:each="department : ${hospital.departmentList}">
             <td th:text="${department.name}">Department name</td>
+            <td>
+                <a th:href="@{'/departments/edit/' + ${department.id}}" class="btn btn-sm btn-warning">Edit</a>
+                <form th:action="@{'/departments/delete/' + ${department.id}}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Delete this department?')">Delete</button>
+                </form>
+            </td>
         </tr>
-        <!-- ✅ Добавлено: сообщение если нет департаментов -->
         <tr th:if="${#lists.isEmpty(hospital.departmentList)}">
-            <td class="text-center">No departments yet</td>
+            <td colspan="2" class="text-center">No departments yet</td>
         </tr>
         </tbody>
     </table>

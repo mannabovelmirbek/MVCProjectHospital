@@ -5,7 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import peaksoft.entity.Hospital;
+import peaksoft.service.DoctorService;
 import peaksoft.service.HospitalService;
+import peaksoft.service.PatientService;
 
 import java.util.List;
 
@@ -15,6 +17,8 @@ import java.util.List;
 public class HospitalController {
 
     private final HospitalService hospitalService;
+    private final DoctorService doctorService;
+    private final PatientService patientService;
 
     @GetMapping
     public String getAllHospitals(Model model) {
@@ -38,7 +42,14 @@ public class HospitalController {
     @GetMapping("/{id}")
     public String getByIdHospital(@PathVariable("id") Long id, Model model) {
         Hospital hospital = hospitalService.getByIdHospital(id);
+
+        // Количество пациентов и докторов в hospital (I)
+        long doctorsCount = doctorService.countDoctorsByHospitalId(id);
+        long patientsCount = patientService.countPatientsByHospitalId(id);
+
         model.addAttribute("hospital", hospital);
+        model.addAttribute("doctorsCount", doctorsCount);
+        model.addAttribute("patientsCount", patientsCount);
         return "hospitalById";
     }
 

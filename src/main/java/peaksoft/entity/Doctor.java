@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,8 +44,8 @@ public class Doctor {
     Hospital hospital;
 
     @ManyToMany(mappedBy = "doctorsList")
-    List<Department> departmentsList;
+    List<Department> departmentsList = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor")
-    List<Appointment> appointmentsList;
+    List<Appointment> appointmentsList = new ArrayList<>();
 }
