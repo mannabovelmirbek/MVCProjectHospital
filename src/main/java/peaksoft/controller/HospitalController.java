@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/hospitals")
 @RequiredArgsConstructor
 public class HospitalController {
+
     private final HospitalService hospitalService;
 
     @GetMapping
@@ -30,16 +31,34 @@ public class HospitalController {
 
     @PostMapping("/saveHospital")
     public String saveHospital(@ModelAttribute("newHospital") Hospital hospital) {
-        // ⬆️ ИСПРАВЛЕНО: было "hospital", должно быть "newHospital"
         hospitalService.saveHospital(hospital);
         return "redirect:/hospitals";
     }
 
     @GetMapping("/{id}")
     public String getByIdHospital(@PathVariable("id") Long id, Model model) {
-        // ⬆️ ИСПРАВЛЕНО: добавлено ("id")
         Hospital hospital = hospitalService.getByIdHospital(id);
         model.addAttribute("hospital", hospital);
         return "hospitalById";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editForm(@PathVariable("id") Long id, Model model) {
+        Hospital hospital = hospitalService.getByIdHospital(id);
+        model.addAttribute("editHospital", hospital);
+        return "editHospital";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateHospital(@PathVariable("id") Long id,
+                                 @ModelAttribute("editHospital") Hospital hospital) {
+        hospitalService.updateHospital(id, hospital);
+        return "redirect:/hospitals";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteHospital(@PathVariable("id") Long id) {
+        hospitalService.deleteHospital(id);
+        return "redirect:/hospitals";
     }
 }

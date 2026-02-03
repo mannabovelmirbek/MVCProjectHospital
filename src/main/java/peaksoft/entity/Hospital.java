@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,11 +30,12 @@ public class Hospital {
     String address;
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
-    List<Doctor> doctorsList;
+    List<Doctor> doctorsList = new ArrayList<>();
+
+    // ✅ ИЗМЕНЕНО: Добавлен fetch = FetchType.EAGER
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    List<Department> departmentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
-    List<Department> departmentList;
-
-    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
-    List<Patient> patientsList;
+    List<Patient> patientsList = new ArrayList<>();
 }

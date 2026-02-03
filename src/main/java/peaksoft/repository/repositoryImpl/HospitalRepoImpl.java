@@ -25,13 +25,16 @@ public class HospitalRepoImpl implements HospitalRepo {
     @Override
     public List<Hospital> getAllHospital() {
         return entityManager.createQuery(
-                "select h from Hospital h", Hospital.class)
+                        "select h from Hospital h", Hospital.class)
                 .getResultList();
     }
 
     @Override
     public Hospital getByIdHospital(Long id) {
-        return entityManager.createQuery("select h from Hospital h where h.id = :id", Hospital.class)
+        // ✅ ИСПРАВЛЕНО: Добавлен LEFT JOIN FETCH для загрузки департаментов
+        return entityManager.createQuery(
+                        "select h from Hospital h left join fetch h.departmentList where h.id = :id",
+                        Hospital.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }
