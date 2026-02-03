@@ -1,5 +1,7 @@
 package peaksoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -41,11 +43,14 @@ public class Doctor {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "hospital_id", nullable = false)
+    @JsonBackReference
     Hospital hospital;
 
     @ManyToMany(mappedBy = "doctorsList")
+    @JsonIgnore  // ✅ Предотвращает обратную ссылку на департаменты
     List<Department> departmentsList = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor")
+    @JsonIgnore  // ✅ Игнорируем appointments при сериализации
     List<Appointment> appointmentsList = new ArrayList<>();
 }

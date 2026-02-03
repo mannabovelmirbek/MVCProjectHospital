@@ -8,7 +8,10 @@ import peaksoft.entity.*;
 import peaksoft.service.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/appointments")
@@ -75,16 +78,43 @@ public class AppointmentController {
         return "redirect:/appointments";
     }
 
-    // API endpoints for dynamic dropdown population
+    // ✅ API endpoints - теперь работают благодаря Jackson аннотациям
     @GetMapping("/api/departments/{hospitalId}")
     @ResponseBody
-    public List<Department> getDepartmentsByHospital(@PathVariable Long hospitalId) {
-        return departmentService.getAllDepartmentByHospital(hospitalId);
+    public List<Map<String, Object>> getDepartmentsByHospital(@PathVariable("hospitalId") Long hospitalId) {
+        List<Department> departments = departmentService.getAllDepartmentByHospital(hospitalId);
+
+        return departments.stream()
+                .map(dept -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", dept.getId());
+                    map.put("name", dept.getName());
+                    return map;
+                })
+                .collect(Collectors.toList());
     }
 
+    @GetMapping("/api/doctors/{departmentId}")
+    @ResponseBody
+    public List<Map<String, Object>> getDoctorsByDepartment(@PathVariable("departmentId") Long departmentId) {
+        List<Doctor> doctors = doctorService.getDoctorsByDepartment(departmentId);
+
+        return doctors.stream()
+                .map(doctor -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", doctor.getId());
+                    map.put("firstName", doctor.getFirstName());
+                    map.put("lastName", doctor.getLastName());
+                    map.put("position", doctor.getPosition());
+                    map.put("email", doctor.getEmail());
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
     @GetMapping("/api/doctors")
     @ResponseBody
     public List<Doctor> getAllDoctors() {
         return doctorService.getAllDoctor();
     }
+
 }

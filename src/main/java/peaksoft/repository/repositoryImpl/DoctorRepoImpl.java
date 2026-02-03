@@ -79,11 +79,13 @@ public class DoctorRepoImpl implements DoctorRepo {
 
     @Override
     public Doctor getByIdDoctor(Long id) {
-        Doctor doctor = entityManager.find(Doctor.class, id);
-        if (doctor == null) {
-            throw new NotFoundException("Doctor with id " + id + " not found");
-        }
-        return doctor;
+        return entityManager.createQuery(
+                        "select d from Doctor d " +
+                                "left join fetch d.departmentsList " +
+                                "left join fetch d.hospital " +
+                                "where d.id = :id", Doctor.class)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
     @Override
@@ -152,5 +154,15 @@ public class DoctorRepoImpl implements DoctorRepo {
         } catch (NoResultException e) {
             return false;
         }
+    }
+
+    @Override
+    public List<Doctor> getDoctorsByDepartment(Long departmentId) {
+        return entityManager.createQuery(
+                        "select d from Doctor d " +
+                                "join d.departmentsList dept " +
+                                "where dept.id = :departmentId", Doctor.class)
+                .setParameter("departmentId", departmentId)
+                .getResultList();
     }
 }

@@ -1,5 +1,9 @@
 package peaksoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +33,7 @@ public class Department {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "hospital_id", nullable = false)
+    @JsonIgnore  // ✅ Игнорируем hospital
     Hospital hospital;
 
     @ManyToMany
@@ -37,5 +42,6 @@ public class Department {
             joinColumns = @JoinColumn(name = "department_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
+    @JsonIgnoreProperties({"departmentsList", "hospital", "appointmentsList"})
     List<Doctor> doctorsList = new ArrayList<>();
 }

@@ -39,6 +39,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    public List<Department> getAllDepartments() {
+        return departmentRepo.getAllDepartments();
+    }
+
+    @Override
     public boolean existsByName(String name) {
         return departmentRepo.existsByName(name);
     }

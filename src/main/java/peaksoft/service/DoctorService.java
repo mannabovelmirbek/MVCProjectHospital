@@ -15,4 +15,7 @@ public interface DoctorService {
     long countDoctorsByHospitalId(Long hospitalId);
 
     boolean existsByEmail(String email);
+
+    // ✅ НОВЫЙ МЕТОД
+    List<Doctor> getDoctorsByDepartment(Long departmentId);
 }

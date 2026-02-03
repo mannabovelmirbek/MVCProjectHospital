@@ -1,5 +1,7 @@
 package peaksoft.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -30,12 +32,14 @@ public class Hospital {
     String address;
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
+    @JsonIgnore  // ✅ Игнорируем докторов при сериализации hospital
     List<Doctor> doctorsList = new ArrayList<>();
 
-    // ✅ ИЗМЕНЕНО: Добавлен fetch = FetchType.EAGER
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference("hospital-departments")  // ✅ Управляем сериализацией департаментов
     List<Department> departmentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
+    @JsonIgnore  // ✅ Игнорируем пациентов при сериализации
     List<Patient> patientsList = new ArrayList<>();
 }

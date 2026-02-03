@@ -7,11 +7,11 @@ import java.util.List;
 
 @Repository
 public interface DepartmentRepo {
-    void saveDepartmentWithHospital(Long id,Department department);
+    void saveDepartmentWithHospital(Long id, Department department);
     List<Department> getAllDepartmentByHospital(Long id);
+    List<Department> getAllDepartments();
     Department getByIdDepartment(Long id);
-    void updateDepartment(Long id,Department newDepartment);
+    void updateDepartment(Long id, Department newDepartment);
     void deleteDepartment(Long id);
-
     boolean existsByName(String name);
 }

@@ -47,7 +47,9 @@ public class DepartmentRepoImpl implements DepartmentRepo {
     @Override
     public List<Department> getAllDepartmentByHospital(Long id) {
         return entityManager.createQuery(
-                        "select d from Department d join fetch d.hospital h where d.hospital.id = :id",
+                        "select d from Department d " +
+                                "left join fetch d.doctorsList " +  // ← Загружаем doctorsList сразу
+                                "where d.hospital.id = :id",
                         Department.class)
                 .setParameter("id", id)
                 .getResultList();
@@ -89,7 +91,12 @@ public class DepartmentRepoImpl implements DepartmentRepo {
         }
         entityManager.remove(department);
     }
-
+    @Override
+    public List<Department> getAllDepartments() {
+        return entityManager.createQuery(
+                "select d from Department d", Department.class
+        ).getResultList();
+    }
     @Override
     public boolean existsByName(String name) {
         try {

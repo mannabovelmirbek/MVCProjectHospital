@@ -20,35 +20,34 @@ public class DoctorController {
     private final HospitalService hospitalService;
     private final DepartmentService departmentService;
 
-
     @GetMapping
     public String getAllDoctors(Model model) {
-        List<Doctor> doctors = doctorService.getAllDoctor();
-        model.addAttribute("doctors", doctors);
+        model.addAttribute("doctors", doctorService.getAllDoctor());
         return "doctorsList";
     }
 
     @GetMapping("/add")
     public String addDoctorForm(Model model) {
-        List<Hospital> hospitals = hospitalService.getAllHospital();
         model.addAttribute("newDoctor", new Doctor());
-        model.addAttribute("hospitals", hospitals);
+        model.addAttribute("hospitals", hospitalService.getAllHospital());
+        model.addAttribute("departments", departmentService.getAllDepartments());
         return "newDoctor";
     }
 
     @PostMapping("/save")
-    public String saveDoctor(@ModelAttribute("newDoctor") Doctor doctor,
-                             @RequestParam("hospitalId") Long hospitalId,
-                             @RequestParam(value = "departmentIds", required = false) List<Long> departmentIds) {
+    public String saveDoctor(
+            @ModelAttribute("newDoctor") Doctor doctor,
+            @RequestParam("hospitalId") Long hospitalId,
+            @RequestParam(value = "departmentIds", required = false) List<Long> departmentIds) {
 
-        // 1. Устанавливаем hospital для доктора
+        // 1. Устанавливаем hospital
         Hospital hospital = hospitalService.getByIdHospital(hospitalId);
         doctor.setHospital(hospital);
 
         // 2. Сохраняем доктора
         doctorService.saveDoctor(doctor);
 
-        // 3. Назначаем доктора в департаменты (если выбраны)
+        // 3. Назначаем в департаменты (если выбраны)
         if (departmentIds != null && !departmentIds.isEmpty()) {
             doctorService.assignDoctorToDepartments(doctor.getId(), departmentIds);
         }
@@ -58,8 +57,7 @@ public class DoctorController {
 
     @GetMapping("/{id}")
     public String getDoctorById(@PathVariable("id") Long id, Model model) {
-        Doctor doctor = doctorService.getByIdDoctor(id);
-        model.addAttribute("doctor", doctor);
+        model.addAttribute("doctor", doctorService.getByIdDoctor(id));
         return "doctorById";
     }
 

@@ -52,4 +52,10 @@ public class DoctorServiceImpl implements DoctorService {
     public boolean existsByEmail(String email) {
         return doctorRepo.existsByEmail(email);
     }
+
+    // ✅ НОВЫЙ МЕТОД
+    @Override
+    public List<Doctor> getDoctorsByDepartment(Long departmentId) {
+        return doctorRepo.getDoctorsByDepartment(departmentId);
+    }
 }
