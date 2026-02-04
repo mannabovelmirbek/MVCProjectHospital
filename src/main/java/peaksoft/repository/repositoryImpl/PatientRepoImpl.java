@@ -25,7 +25,7 @@ public class PatientRepoImpl implements PatientRepo {
 
     @Override
     public void savePatient(Patient patient) {
-        // Проверка на null полей (VII)
+
         if (patient.getFirstName() == null || patient.getFirstName().isBlank()) {
             throw new RequiredFieldException("Patient first name cannot be null or empty");
         }
@@ -42,7 +42,7 @@ public class PatientRepoImpl implements PatientRepo {
             throw new RequiredFieldException("Patient gender cannot be null");
         }
 
-        // Валидация номера телефона (III)
+
         validatePhoneNumber(patient.getPhoneNumber());
 
         entityManager.persist(patient);
@@ -71,7 +71,7 @@ public class PatientRepoImpl implements PatientRepo {
             throw new NotFoundException("Patient with id " + id + " not found");
         }
 
-        // Проверка на null полей
+
         if (newPatient.getFirstName() == null || newPatient.getFirstName().isBlank()) {
             throw new RequiredFieldException("Patient first name cannot be null or empty");
         }
@@ -88,7 +88,6 @@ public class PatientRepoImpl implements PatientRepo {
             throw new RequiredFieldException("Patient gender cannot be null");
         }
 
-        // Валидация номера телефона
         validatePhoneNumber(newPatient.getPhoneNumber());
 
         patient.setFirstName(newPatient.getFirstName());

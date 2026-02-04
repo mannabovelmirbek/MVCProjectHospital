@@ -29,12 +29,10 @@ public class DepartmentRepoImpl implements DepartmentRepo {
             throw new NotFoundException("Hospital with id " + id + " not found");
         }
 
-        // Проверка на null (VII)
         if (department.getName() == null || department.getName().isBlank()) {
             throw new RequiredFieldException("Department name cannot be null or empty");
         }
 
-        // Проверка на дубликат имени (VI)
         if (existsByName(department.getName())) {
             throw new DepartmentAlReadyExistsException("Department with name '" + department.getName() + "' already exists");
         }
@@ -48,7 +46,7 @@ public class DepartmentRepoImpl implements DepartmentRepo {
     public List<Department> getAllDepartmentByHospital(Long id) {
         return entityManager.createQuery(
                         "select d from Department d " +
-                                "left join fetch d.doctorsList " +  // ← Загружаем doctorsList сразу
+                                "left join fetch d.doctorsList " +
                                 "where d.hospital.id = :id",
                         Department.class)
                 .setParameter("id", id)
@@ -75,7 +73,6 @@ public class DepartmentRepoImpl implements DepartmentRepo {
             throw new RequiredFieldException("Department name cannot be null or empty");
         }
 
-        // Проверка на дубликат имени при обновлении
         if (!department.getName().equals(newDepartment.getName()) && existsByName(newDepartment.getName())) {
             throw new DepartmentAlReadyExistsException("Department with name '" + newDepartment.getName() + "' already exists");
         }

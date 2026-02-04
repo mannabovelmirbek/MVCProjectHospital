@@ -26,26 +26,26 @@ public class Appointment {
     LocalDate date;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id", nullable = false)
-    @JsonIgnore  // ✅ Игнорируем при сериализации (если понадобится)
+    @JsonIgnore
     Hospital hospital;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
-    @JsonIgnore  // ✅ Игнорируем при сериализации
+    @JsonIgnore
     Department department;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false)
-    @JsonIgnore  // ✅ Игнорируем при сериализации
+    @JsonIgnore
     Doctor doctor;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
-    @JsonIgnore  // ✅ Игнорируем при сериализации
+    @JsonIgnore
     Patient patient;
 }

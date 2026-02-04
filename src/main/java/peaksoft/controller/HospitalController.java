@@ -43,7 +43,6 @@ public class HospitalController {
     public String getByIdHospital(@PathVariable("id") Long id, Model model) {
         Hospital hospital = hospitalService.getByIdHospital(id);
 
-        // Количество пациентов и докторов в hospital (I)
         long doctorsCount = doctorService.countDoctorsByHospitalId(id);
         long patientsCount = patientService.countPatientsByHospitalId(id);
 

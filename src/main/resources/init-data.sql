@@ -2,3 +2,4 @@
 --                                           ('Bishkek Hospital', 'Чүй проспекти 123'),
 --                                           ('MedCenter Clinic', 'Ибраимов көчөсү 45'),
 --                                           ('City Hospital №1', 'Токтогул көчөсү 89');
+

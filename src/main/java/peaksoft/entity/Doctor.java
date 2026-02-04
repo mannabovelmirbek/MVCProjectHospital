@@ -47,10 +47,10 @@ public class Doctor {
     Hospital hospital;
 
     @ManyToMany(mappedBy = "doctorsList")
-    @JsonIgnore  // ✅ Предотвращает обратную ссылку на департаменты
+    @JsonIgnore
     List<Department> departmentsList = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor")
-    @JsonIgnore  // ✅ Игнорируем appointments при сериализации
+    @JsonIgnore
     List<Appointment> appointmentsList = new ArrayList<>();
 }

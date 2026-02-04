@@ -25,7 +25,7 @@ public class DoctorRepoImpl implements DoctorRepo {
 
     @Override
     public void saveDoctor(Doctor doctor) {
-        // Проверка на null полей (VII)
+
         if (doctor.getFirstName() == null || doctor.getFirstName().isBlank()) {
             throw new RequiredFieldException("Doctor first name cannot be null or empty");
         }
@@ -39,7 +39,7 @@ public class DoctorRepoImpl implements DoctorRepo {
             throw new RequiredFieldException("Doctor email cannot be null or empty");
         }
 
-        // Проверка на уникальность email (V)
+
         if (existsByEmail(doctor.getEmail())) {
             throw new DoctorEmailAlreadyExistsException("Doctor with email '" + doctor.getEmail() + "' already exists");
         }
@@ -58,7 +58,7 @@ public class DoctorRepoImpl implements DoctorRepo {
             for (Long deptId : departmentIds) {
                 Department department = entityManager.find(Department.class, deptId);
                 if (department != null) {
-                    // Добавляем связь с обеих сторон
+
                     if (!doctor.getDepartmentsList().contains(department)) {
                         doctor.getDepartmentsList().add(department);
                     }
@@ -95,7 +95,7 @@ public class DoctorRepoImpl implements DoctorRepo {
             throw new NotFoundException("Doctor with id " + id + " not found");
         }
 
-        // Проверка на null полей
+
         if (newDoctor.getFirstName() == null || newDoctor.getFirstName().isBlank()) {
             throw new RequiredFieldException("Doctor first name cannot be null or empty");
         }
@@ -109,7 +109,6 @@ public class DoctorRepoImpl implements DoctorRepo {
             throw new RequiredFieldException("Doctor email cannot be null or empty");
         }
 
-        // Проверка на уникальность email при обновлении
         if (!doctor.getEmail().equals(newDoctor.getEmail()) && existsByEmail(newDoctor.getEmail())) {
             throw new DoctorEmailAlreadyExistsException("Doctor with email '" + newDoctor.getEmail() + "' already exists");
         }
@@ -127,7 +126,7 @@ public class DoctorRepoImpl implements DoctorRepo {
             throw new NotFoundException("Doctor with id " + id + " not found");
         }
 
-        // Удаляем связи с департаментами перед удалением доктора
+
         for (Department dept : doctor.getDepartmentsList()) {
             dept.getDoctorsList().remove(doctor);
         }

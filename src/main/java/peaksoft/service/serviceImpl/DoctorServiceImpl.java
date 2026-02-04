@@ -53,7 +53,6 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorRepo.existsByEmail(email);
     }
 
-    // ✅ НОВЫЙ МЕТОД
     @Override
     public List<Doctor> getDoctorsByDepartment(Long departmentId) {
         return doctorRepo.getDoctorsByDepartment(departmentId);

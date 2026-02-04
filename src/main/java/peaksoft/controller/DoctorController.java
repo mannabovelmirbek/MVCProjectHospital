@@ -40,14 +40,11 @@ public class DoctorController {
             @RequestParam("hospitalId") Long hospitalId,
             @RequestParam(value = "departmentIds", required = false) List<Long> departmentIds) {
 
-        // 1. Устанавливаем hospital
         Hospital hospital = hospitalService.getByIdHospital(hospitalId);
         doctor.setHospital(hospital);
 
-        // 2. Сохраняем доктора
         doctorService.saveDoctor(doctor);
 
-        // 3. Назначаем в департаменты (если выбраны)
         if (departmentIds != null && !departmentIds.isEmpty()) {
             doctorService.assignDoctorToDepartments(doctor.getId(), departmentIds);
         }

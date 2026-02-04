@@ -16,6 +16,5 @@ public interface DoctorService {
 
     boolean existsByEmail(String email);
 
-    // ✅ НОВЫЙ МЕТОД
     List<Doctor> getDoctorsByDepartment(Long departmentId);
 }

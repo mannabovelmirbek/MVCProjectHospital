@@ -33,7 +33,7 @@ public class Department {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "hospital_id", nullable = false)
-    @JsonIgnore  // ✅ Игнорируем hospital
+    @JsonIgnore
     Hospital hospital;
 
     @ManyToMany

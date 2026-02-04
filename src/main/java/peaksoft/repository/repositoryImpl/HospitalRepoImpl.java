@@ -21,7 +21,7 @@ public class HospitalRepoImpl implements HospitalRepo {
 
     @Override
     public void saveHospital(Hospital hospital) {
-        // Проверка на null полей (VII)
+
         if (hospital.getName() == null || hospital.getName().isBlank()) {
             throw new RequiredFieldException("Hospital name cannot be null or empty");
         }
@@ -59,7 +59,6 @@ public class HospitalRepoImpl implements HospitalRepo {
             throw new NotFoundException("Hospital with id " + id + " not found");
         }
 
-        // Проверка на null полей
         if (newHospital.getName() == null || newHospital.getName().isBlank()) {
             throw new RequiredFieldException("Hospital name cannot be null or empty");
         }

@@ -50,10 +50,10 @@ public class Patient {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "hospital_id", nullable = false)
-    @JsonIgnore  // ✅ Игнорируем hospital при сериализации
+    @JsonIgnore
     Hospital hospital;
 
     @OneToMany(mappedBy = "patient")
-    @JsonIgnore  // ✅ Игнорируем appointments при сериализации
+    @JsonIgnore
     List<Appointment> appointmentsList;
 }

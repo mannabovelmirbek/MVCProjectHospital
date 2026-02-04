@@ -18,7 +18,6 @@ public interface DoctorRepo {
 
     boolean existsByEmail(String email);
 
-    // ✅ НОВЫЙ МЕТОД
     List<Doctor> getDoctorsByDepartment(Long departmentId);
 
 }

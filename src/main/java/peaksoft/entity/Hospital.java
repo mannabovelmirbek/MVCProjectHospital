@@ -32,14 +32,14 @@ public class Hospital {
     String address;
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
-    @JsonIgnore  // ✅ Игнорируем докторов при сериализации hospital
+    @JsonIgnore
     List<Doctor> doctorsList = new ArrayList<>();
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference("hospital-departments")  // ✅ Управляем сериализацией департаментов
+    @JsonManagedReference("hospital-departments")
     List<Department> departmentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
-    @JsonIgnore  // ✅ Игнорируем пациентов при сериализации
+    @JsonIgnore
     List<Patient> patientsList = new ArrayList<>();
 }

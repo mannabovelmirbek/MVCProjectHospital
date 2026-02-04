@@ -21,7 +21,6 @@ public class AppointmentRepoImpl implements AppointmentRepo {
 
     @Override
     public void saveAppointment(Appointment appointment) {
-        // Проверка на null полей (VII)
         if (appointment.getDate() == null) {
             throw new RequiredFieldException("Appointment date cannot be null");
         }
@@ -39,54 +38,78 @@ public class AppointmentRepoImpl implements AppointmentRepo {
         }
 
         entityManager.persist(appointment);
+        System.out.println("✅ Appointment saved successfully");
     }
 
     @Override
     public List<Appointment> getAllAppointment() {
-        return entityManager.createQuery(
-                        "select a from Appointment a " +
-                                "join fetch a.hospital " +
-                                "join fetch a.department " +
-                                "join fetch a.doctor " +
-                                "join fetch a.patient",
+        // ✅ ДОБАВЛЕН DISTINCT
+        List<Appointment> appointments = entityManager.createQuery(
+                        "select distinct a from Appointment a " +
+                                "left join fetch a.hospital " +
+                                "left join fetch a.department " +
+                                "left join fetch a.doctor " +
+                                "left join fetch a.patient",
                         Appointment.class)
                 .getResultList();
+
+        System.out.println("✅ Retrieved " + appointments.size() + " appointments");
+        return appointments;
     }
 
     @Override
     public Appointment getByIdAppointment(Long id) {
-        Appointment appointment = entityManager.find(Appointment.class, id);
-        if (appointment == null) {
+        try {
+            Appointment appointment = entityManager.createQuery(
+                            "select a from Appointment a " +
+                                    "left join fetch a.hospital " +
+                                    "left join fetch a.department " +
+                                    "left join fetch a.doctor " +
+                                    "left join fetch a.patient " +
+                                    "where a.id = :id",
+                            Appointment.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+
+            return appointment;
+        } catch (Exception e) {
             throw new NotFoundException("Appointment with id " + id + " not found");
         }
-        return appointment;
     }
 
     @Override
     public void updateAppointment(Long id, Appointment newAppointment) {
+        System.out.println("=== REPOSITORY UPDATE ===");
+        System.out.println("ID: " + id);
+
         Appointment appointment = entityManager.find(Appointment.class, id);
         if (appointment == null) {
             throw new NotFoundException("Appointment with id " + id + " not found");
         }
 
-        // Проверка на null полей
         if (newAppointment.getDate() == null) {
             throw new RequiredFieldException("Appointment date cannot be null");
         }
+        if (newAppointment.getHospital() == null) {
+            throw new RequiredFieldException("Appointment hospital cannot be null");
+        }
+        if (newAppointment.getDepartment() == null) {
+            throw new RequiredFieldException("Appointment department cannot be null");
+        }
+        if (newAppointment.getDoctor() == null) {
+            throw new RequiredFieldException("Appointment doctor cannot be null");
+        }
+        if (newAppointment.getPatient() == null) {
+            throw new RequiredFieldException("Appointment patient cannot be null");
+        }
 
         appointment.setDate(newAppointment.getDate());
-        if (newAppointment.getHospital() != null) {
-            appointment.setHospital(newAppointment.getHospital());
-        }
-        if (newAppointment.getDepartment() != null) {
-            appointment.setDepartment(newAppointment.getDepartment());
-        }
-        if (newAppointment.getDoctor() != null) {
-            appointment.setDoctor(newAppointment.getDoctor());
-        }
-        if (newAppointment.getPatient() != null) {
-            appointment.setPatient(newAppointment.getPatient());
-        }
+        appointment.setHospital(newAppointment.getHospital());
+        appointment.setDepartment(newAppointment.getDepartment());
+        appointment.setDoctor(newAppointment.getDoctor());
+        appointment.setPatient(newAppointment.getPatient());
+
+        System.out.println("✅ Appointment updated successfully");
     }
 
     @Override
@@ -96,19 +119,23 @@ public class AppointmentRepoImpl implements AppointmentRepo {
             throw new NotFoundException("Appointment with id " + id + " not found");
         }
         entityManager.remove(appointment);
+        System.out.println("✅ Appointment deleted successfully");
     }
 
     @Override
     public List<Appointment> findAllOrderByDateDesc() {
-        // Последние записи первыми (II)
-        return entityManager.createQuery(
-                        "select a from Appointment a " +
-                                "join fetch a.hospital " +
-                                "join fetch a.department " +
-                                "join fetch a.doctor " +
-                                "join fetch a.patient " +
+        // ✅ ДОБАВЛЕН DISTINCT
+        List<Appointment> appointments = entityManager.createQuery(
+                        "select distinct a from Appointment a " +
+                                "left join fetch a.hospital " +
+                                "left join fetch a.department " +
+                                "left join fetch a.doctor " +
+                                "left join fetch a.patient " +
                                 "order by a.date desc",
                         Appointment.class)
                 .getResultList();
+
+        System.out.println("✅ Found " + appointments.size() + " appointments in database");
+        return appointments;
     }
 }
